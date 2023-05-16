@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="or">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>ଗ୍ରୋସେରୀ ତାଲିକା</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js" integrity="sha512-w3u9q/DeneCSwUDjhiMNibTRh/1i/gScBVp2imNVAMCt6cUHIw6xzhzcPFIaL3Q1EbI2l+nu17q2aLJJLo4ZYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js" integrity="sha512-w3u9q/DeneCSwUDjhiMNibTRh/1i/gScBVp2imNVAMCt6cUHIw6xzhzcPFIaL3Q1EbI2l+nu17q2aLJJLo4ZYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container mt-5">
+
+        <h1>Grocery List</h1>
+
+        <form id="grocery-form">
+
+            <div class="mb-3">
+
+                <label for="grocery-name" class="form-label">ସାମଗ୍ରୀ</label>
+
+                <input type="text" class="form-control" id="grocery-name" name="groceryName" required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label for="grocery-quantity" class="form-label">ପରିମାଣ</label>
+
+                <input type="number" class="form-control" id="grocery-quantity" name="groceryQuantity">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label for="grocery-price" class="form-label">ମୂଲ୍ୟ</label>
+
+                <input type="number" class="form-control" id="grocery-price" name="groceryPrice">
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">ଜୋଡ଼ନ୍ତୁ</button>
+
+        </form>
+
+        <table class="table mt-3" id="grocery-table">
+
+            <thead>
+
+                <tr>
+
+                    <th scope="col">#</th>
+
+                    <th scope="col">ସାମଗ୍ରୀ</th>
+
+                    <th scope="col">ପରିମାଣ</th>
+
+                    <th scope="col">ମୂଲ୍ୟ</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="grocery-list">
+
+            </tbody>
+
+        </table>
+
+        </table>
+
+        <button id="download-btn" class="btn btn-primary mt-3">ଡାଉନଲୋଡ କରନ୍ତୁ</button>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script>
+
+        console.log('Hello World!');
+
+        function toOdiaNumber(num) {
+
+            const odiaDigits = ["୦", "୧", "୨", "୩", "୪", "୫", "୬", "୭", "୮", "୯"];
+
+            const digits = num.toString().split("");
+
+            return digits.map(d => odiaDigits[parseInt(d)]).join("");
+
+        }
+
+        const groceryForm = document.getElementById('grocery-form');
+
+        const groceryList = document.getElementById('grocery-list');
+
+        const downloadBtn = document.getElementById('download-btn');
+
+        let itemCount = 0;
+
+        groceryForm.addEventListener('submit', (event) => {
+
+            event.preventDefault();
+
+            const name = document.getElementById('grocery-name').value;
+
+            const quantity = document.getElementById('grocery-quantity').value;
+
+            const price = document.getElementById('grocery-price').value;
+
+            const row = `
+
+    <tr>
+
+      <th scope="row">${toOdiaNumber(++itemCount)}</th>
+
+      <td>${name}</td>
+
+      <td>${quantity}</td>
+
+      <td>${price}</td>
+
+    </tr>
+
+  `;
+
+            groceryList.insertAdjacentHTML('beforeend', row);
+
+            groceryForm.reset();
+
+        });
+
+        downloadBtn.addEventListener('click', () => {
+
+  const groceryTable = document.getElementById('grocery-table');
+
+  html2canvas(groceryTable).then(canvas => {
+
+    const imgData = canvas.toDataURL('image/png');
+
+    const link = document.createElement('a');
+
+    link.href = imgData;
+
+    link.download = 'grocery-list.png';
+
+    link.click();
+
+  });
+
+});
+
+    </script>
+
+    <script src="main.js"></script>
+
+</body>
+
+</html>
